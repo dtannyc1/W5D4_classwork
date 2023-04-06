@@ -18,15 +18,25 @@ class ShortenedUrl < ApplicationRecord
 
     def self.random_code
         str = SecureRandom.urlsafe_base64
-        self.exists?(:short_url => str)
+       while self.exists?(:short_url => str)
+        str = SecureRandom.urlsafe_base64
+       end
+       return str
     end
 
     after_initialize do |shortenedurl|
         generate_short_url
     end
 
+    belongs_to :submitter,
+    primary_key: :id,
+    foreign_key: :user_id,
+    class_name: :User
+
     private
     def generate_short_url
-
+        if !short_url
+            self.short_url = ShortenedUrl.random_code
+        end
     end
 end
