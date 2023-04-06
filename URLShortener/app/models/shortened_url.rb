@@ -24,6 +24,24 @@ class ShortenedUrl < ApplicationRecord
        return str
     end
 
+    def num_clicks
+        self.visitors.count
+    end
+
+    def num_uniques
+        visitor_ids = self.visitors.map {|visitor| visitor.id}
+        visitor_ids.uniq
+        visitor_ids.count
+    end
+
+    def recent_uniques
+        # recent_visitors = self.visitors where (10.minutes.ago)
+        recent_visitors = 
+        visitor_ids = recent_visitors.map {|visitor| visitor.id}
+        visitor_ids.uniq
+        visitor_ids.count
+    end
+
     after_initialize do |shortenedurl|
         generate_short_url
     end
